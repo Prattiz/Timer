@@ -7,7 +7,7 @@ export const Container = styled.header`
     justify-content: space-between;
     margin: 4rem 0 0;
     
-
+    
     nav{
         display: flex;
         gap: 20px;
@@ -32,9 +32,6 @@ export const Container = styled.header`
 
         &.active{
             color:${props => props.theme["green-500"]}
-        }
-
-        
+        }   
     }
-
 `
