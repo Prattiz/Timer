@@ -2,15 +2,13 @@ import styled from "styled-components";
 
 export const Container = styled.div`
 
-    max-width: 70rem;
+    max-width: 80rem;
     height: calc(100vh - 10rem);
     margin: 5rem auto;
-    padding: 2rem;
+    padding: 2rem 4rem;
 
     background-color: ${props => props.theme["gray-800"]};
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    
-    
 `

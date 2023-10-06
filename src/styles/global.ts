@@ -25,7 +25,7 @@ export const GlobalStyle = createGlobalStyle`
         color: ${props => props.theme["gray-300"]};
     }
 
-
-
-    
+    a, button {
+        cursor: pointer;
+    }
 `
