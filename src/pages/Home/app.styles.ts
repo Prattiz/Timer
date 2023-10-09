@@ -100,7 +100,7 @@ export const StartButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8.5px;
+    gap: 5px;
     font-weight: bold;
     background-color: ${props => props.theme["green-500"]};
     color: ${props => props.theme["gray-100"]};
@@ -112,5 +112,9 @@ export const StartButton = styled.button`
     &:disabled{
         opacity: .7;
         cursor: not-allowed;
+    }
+
+    svg{
+        margin-bottom: 2px;
     }
 `

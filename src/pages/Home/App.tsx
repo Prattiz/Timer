@@ -1,3 +1,6 @@
+
+import { IoPlayOutline } from "react-icons/io5";
+import { useForm } from "react-hook-form";
 import 
 { 
   Container, Form, CountDownContainer, 
@@ -5,25 +8,36 @@ import
   MinutesInput 
 } 
 from "./app.styles";
-import { IoPlayOutline } from "react-icons/io5"
+
 
 export function Home() {
+
+  const { register, handleSubmit, watch} = useForm();
+  const submitDisabled = watch('task') && watch('minutesAmount');
+
+  function handleCreateSubmit(data: any){
+    console.log(data)
+  }
+
+
   return (
     <Container>
-      <form>
+      <form onSubmit={handleSubmit(handleCreateSubmit)}>
         <Form>
-          <label htmlFor="task">I'll Work With </label>
 
+          <label htmlFor="task">I'll Work With </label>
           <ProjectInput
            type="text" 
            id="task"
            placeholder="Project's Name"
            list="task-suggestions"
+          {...register("task")}
            />
+
            <datalist id="task-suggestions">
-            <option value="Projeto 1"/>
-            <option value="Projeto 2"/>
-            <option value="Projeto 3"/>
+            <option value="Project 1"/>
+            <option value="Project 2"/>
+            <option value="Project 3"/>
            </datalist>
 
           <label htmlFor="minutesAmount">In</label>
@@ -33,6 +47,7 @@ export function Home() {
            placeholder="00"
            min={1}
            max={60}
+           {...register('minutesAmount')}
            
            />
           <span>minutes</span>
@@ -47,7 +62,7 @@ export function Home() {
           <span>0</span>
         </CountDownContainer>
 
-        <StartButton type="submit" disabled><IoPlayOutline size={24}/> Start</StartButton>
+        <StartButton type="submit" disabled={!submitDisabled}><IoPlayOutline size={24}/> Start</StartButton>
       </form>
     </Container>
   )
