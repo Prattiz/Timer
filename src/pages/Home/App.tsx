@@ -47,7 +47,7 @@ export function Home() {
           <span>0</span>
         </CountDownContainer>
 
-        <StartButton type="submit"><IoPlayOutline size={24}/> Start</StartButton>
+        <StartButton type="submit" disabled><IoPlayOutline size={24}/> Start</StartButton>
       </form>
     </Container>
   )
