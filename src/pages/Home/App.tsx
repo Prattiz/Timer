@@ -1,4 +1,3 @@
-
 import { IoPlayOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,35 +9,63 @@ import
   MinutesInput 
 } 
 from "./app.styles";
+import { useState } from "react";
 
 
 const newCycleFormValidationSchema = zod.object({
   task: zod.string().min(1, 'Informe a tarefa'),
   minutesAmount: zod
     .number()
-    .min(1, 'O ciclo precisa ser de no mínimo 5 minutos.')
-    .max(60, 'O ciclo precisa ser de no máximo 60 minutos.'),
+    .min(1, 'the cicle must be a minimun of 1 minute')
+    .max(60, 'the cicle must be a maximum of 60 minutes.'),
 })
 
 type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
+interface Cycle {
+
+  id:string,
+  task: string,
+  minutesAmount: number,
+  
+}
 
 export function Home() {
 
+  const [cycle, setCycles] = useState<Cycle[]>([]);
+  const [active, setActive] = useState<string | null>(null);
+  const [amountSeconds, setAmountSeconds] = useState(0);
   const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
-    defaultValues:{
-      task:"",
-      
-    }
   });
-
+ 
   const submitDisabled = watch('task') && watch('minutesAmount')
 
+
   function handleCreateCicle(data: NewCycleFormData){
-    console.log(data)
+   
+    const id =  String(new Date().getTime());
+
+    const newCycle: Cycle = {
+      id,
+      task: data.task,
+      minutesAmount: data.minutesAmount    
+    };
+
+    setCycles((state) => [...state, newCycle])
+    setActive(id)
     reset()
   }
+
+  const activeCycle = cycle.find((cycle) => cycle.id === active);
+  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60  : 0;
+  const CurentSeconds = activeCycle ? totalSeconds - amountSeconds : 0;
+  const MinutesAmount = Math.floor(CurentSeconds / 60);
+  const secondsAmount = CurentSeconds % 60;
+  const minutes = String(MinutesAmount).padStart(2, '0');
+  const seconds = String(secondsAmount).padStart(2, '0');
+
+
 
   return (
     <Container>
@@ -52,7 +79,7 @@ export function Home() {
            id="task"
            placeholder="Project's Name"
            list="task-suggestions"
-          {...register("task")}
+          {...register('task')}
            />
 
            <datalist id="task-suggestions">
@@ -68,18 +95,18 @@ export function Home() {
            placeholder="0"
            min={1}
            max={60}
-           {...register('minutesAmount')}
+           {...register('minutesAmount', {valueAsNumber: true})}
            />
           <span>minutes</span>
           
         </FormC>
 
         <CountDownContainer>
-          <span>0</span>
-          <span>0</span>
+          <span>{minutes[0]}</span>
+          <span>{minutes[1]}</span>
           <Separator>:</Separator>
-          <span>0</span>
-          <span>0</span>
+          <span>{seconds[0]}</span>
+          <span>{seconds[1]}</span>
         </CountDownContainer>
 
         <StartButton type="submit" disabled={!submitDisabled}>
@@ -88,5 +115,4 @@ export function Home() {
 
       </form>
     </Container>
-  )
-}
+)}
