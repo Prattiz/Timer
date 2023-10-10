@@ -16,7 +16,7 @@ export const Container = styled.div`
     }
 `
 
-export const Form = styled.div`
+export const FormC = styled.div`
 
     width: 100%;
     display: flex;

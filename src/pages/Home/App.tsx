@@ -1,29 +1,50 @@
 
 import { IoPlayOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as zod from "zod";
 import 
 { 
-  Container, Form, CountDownContainer, 
+  Container, FormC, CountDownContainer, 
   Separator, StartButton, ProjectInput, 
   MinutesInput 
 } 
 from "./app.styles";
 
 
+const newCycleFormValidationSchema = zod.object({
+  task: zod.string().min(1, 'Informe a tarefa'),
+  minutesAmount: zod
+    .number()
+    .min(1, 'O ciclo precisa ser de no mínimo 5 minutos.')
+    .max(60, 'O ciclo precisa ser de no máximo 60 minutos.'),
+})
+
+type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
+
+
 export function Home() {
 
-  const { register, handleSubmit, watch} = useForm();
-  const submitDisabled = watch('task') && watch('minutesAmount');
+  const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
+    resolver: zodResolver(newCycleFormValidationSchema),
+    defaultValues:{
+      task:"",
+      
+    }
+  });
 
-  function handleCreateSubmit(data: any){
+  const submitDisabled = watch('task') && watch('minutesAmount')
+
+  function handleCreateCicle(data: NewCycleFormData){
     console.log(data)
+    reset()
   }
-
 
   return (
     <Container>
-      <form onSubmit={handleSubmit(handleCreateSubmit)}>
-        <Form>
+      <form onSubmit={handleSubmit(handleCreateCicle)}>
+
+        <FormC>
 
           <label htmlFor="task">I'll Work With </label>
           <ProjectInput
@@ -44,15 +65,14 @@ export function Home() {
 
           <MinutesInput type="number"
            id="minutesAmount" 
-           placeholder="00"
+           placeholder="0"
            min={1}
            max={60}
            {...register('minutesAmount')}
-           
            />
           <span>minutes</span>
           
-        </Form>
+        </FormC>
 
         <CountDownContainer>
           <span>0</span>
@@ -62,7 +82,10 @@ export function Home() {
           <span>0</span>
         </CountDownContainer>
 
-        <StartButton type="submit" disabled={!submitDisabled}><IoPlayOutline size={24}/> Start</StartButton>
+        <StartButton type="submit" disabled={!submitDisabled}>
+          <IoPlayOutline size={24}/> Start
+        </StartButton>
+
       </form>
     </Container>
   )
