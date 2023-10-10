@@ -2,6 +2,8 @@ import { IoPlayOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
+import { useEffect, useState } from "react";
+import { differenceInSeconds } from "date-fns";
 import 
 { 
   Container, FormC, CountDownContainer, 
@@ -9,7 +11,7 @@ import
   MinutesInput 
 } 
 from "./app.styles";
-import { useState } from "react";
+
 
 
 const newCycleFormValidationSchema = zod.object({
@@ -27,7 +29,7 @@ interface Cycle {
   id:string,
   task: string,
   minutesAmount: number,
-  
+  startTime: Date
 }
 
 export function Home() {
@@ -38,9 +40,16 @@ export function Home() {
   const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
   });
- 
-  const submitDisabled = watch('task') && watch('minutesAmount')
+  const submitDisabled = watch('task') && watch('minutesAmount');
+  const activeCycle = cycle.find((cycle) => cycle.id === active);
 
+  useEffect(() => {
+    if(activeCycle){
+      setInterval(() => {
+        setAmountSeconds(differenceInSeconds(new Date(), activeCycle.startTime))
+      }, 1000)
+    }
+  }, [activeCycle])
 
   function handleCreateCicle(data: NewCycleFormData){
    
@@ -49,7 +58,8 @@ export function Home() {
     const newCycle: Cycle = {
       id,
       task: data.task,
-      minutesAmount: data.minutesAmount    
+      minutesAmount: data.minutesAmount,
+      startTime: new Date() 
     };
 
     setCycles((state) => [...state, newCycle])
@@ -57,7 +67,7 @@ export function Home() {
     reset()
   }
 
-  const activeCycle = cycle.find((cycle) => cycle.id === active);
+ 
   const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60  : 0;
   const CurentSeconds = activeCycle ? totalSeconds - amountSeconds : 0;
   const MinutesAmount = Math.floor(CurentSeconds / 60);
