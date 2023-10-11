@@ -30,7 +30,9 @@ interface Cycle {
   id:string,
   task: string,
   minutesAmount: number,
-  startTime: Date
+  startTime: Date,
+  interruptedDate?: Date,
+  finishedDate?: Date,  
 }
 
 export function Home() {
@@ -41,15 +43,38 @@ export function Home() {
   const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
   });
+
   const submitDisabled = watch('task') && watch('minutesAmount');
   const activeCycle = cycle.find((cycle) => cycle.id === active);
 
+  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60  : 0;
+  const CurentSeconds = activeCycle ? totalSeconds - amountSeconds : 0;
+
+  const MinutesAmount = Math.floor(CurentSeconds / 60);
+  const secondsAmount = CurentSeconds % 60;
+  
+  const minutes = String(MinutesAmount).padStart(2, '0');
+  const seconds = String(secondsAmount).padStart(2, '0');
+
   useEffect(() => {
     let interval: number;
+
     if(activeCycle){
       interval = setInterval(() => {
-        setAmountSeconds(differenceInSeconds(new Date(), activeCycle.startTime))
-      }, 1000)
+        const secondsDiference = differenceInSeconds(new Date(), activeCycle.startTime);
+
+        if(secondsDiference >= totalSeconds){
+          setCycles( state => state.map((cycle) => {
+        if(cycle.id === active){
+          return{...cycle, finishedDate: new Date() }
+        } else{
+          return cycle
+        }}
+      ))
+      setAmountSeconds(totalSeconds)
+      clearInterval(interval)
+    } else setAmountSeconds(secondsDiference)
+  }, 1000)
 
       return() => {
         clearInterval(interval)
@@ -76,8 +101,7 @@ export function Home() {
   }
 
   function handleInterruptCycle(){
-    setCycles(
-      cycle.map((cycle) => {
+    setCycles(state => state.map((cycle) => {
         if(cycle.id === active){
           return{...cycle, interruptedDate: new Date() }
         } else{
@@ -86,24 +110,18 @@ export function Home() {
       )
     )
     setActive(null)
+    document.title = "Timer"
   }
 
- 
-  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60  : 0;
-  const CurentSeconds = activeCycle ? totalSeconds - amountSeconds : 0;
-  const MinutesAmount = Math.floor(CurentSeconds / 60);
-  const secondsAmount = CurentSeconds % 60;
-  const minutes = String(MinutesAmount).padStart(2, '0');
-  const seconds = String(secondsAmount).padStart(2, '0');
 
   useEffect(() =>{
-    if(activeCycle){
+    if(activeCycle) {
       document.title = `Timer - ${minutes}:${seconds}`
     }
-  }, [minutes, seconds, activeCycle])
+    }, [minutes, seconds, activeCycle]
+  )
 
   
-
   return (
     <Container>
       <form onSubmit={handleSubmit(handleCreateCicle)}>
