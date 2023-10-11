@@ -1,4 +1,5 @@
 import { IoPlayOutline } from "react-icons/io5";
+import { TbHandStop } from "react-icons/tb"
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
@@ -8,7 +9,7 @@ import
 { 
   Container, FormC, CountDownContainer, 
   Separator, StartButton, ProjectInput, 
-  MinutesInput 
+  MinutesInput, StopButton
 } 
 from "./app.styles";
 
@@ -74,6 +75,19 @@ export function Home() {
     reset()
   }
 
+  function handleInterruptCycle(){
+    setCycles(
+      cycle.map((cycle) => {
+        if(cycle.id === active){
+          return{...cycle, interruptedDate: new Date() }
+        } else{
+          return cycle
+        }}
+      )
+    )
+    setActive(null)
+  }
+
  
   const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60  : 0;
   const CurentSeconds = activeCycle ? totalSeconds - amountSeconds : 0;
@@ -88,6 +102,8 @@ export function Home() {
     }
   }, [minutes, seconds, activeCycle])
 
+  
+
   return (
     <Container>
       <form onSubmit={handleSubmit(handleCreateCicle)}>
@@ -100,6 +116,7 @@ export function Home() {
            id="task"
            placeholder="Project's Name"
            list="task-suggestions"
+           disabled={!!activeCycle}
           {...register('task')}
            />
 
@@ -116,6 +133,7 @@ export function Home() {
            placeholder="0"
            min={1}
            max={60}
+           disabled={!!activeCycle}
            {...register('minutesAmount', {valueAsNumber: true})}
            />
           <span>minutes</span>
@@ -130,9 +148,16 @@ export function Home() {
           <span>{seconds[1]}</span>
         </CountDownContainer>
 
-        <StartButton type="submit" disabled={!submitDisabled}>
-          <IoPlayOutline size={24}/> Start
-        </StartButton>
+        {
+        activeCycle ? 
+          <StopButton type="button" onClick={handleInterruptCycle}>
+            <TbHandStop size={24}/> Stop
+          </StopButton>
+        : 
+          <StartButton type="submit" disabled={!submitDisabled}>
+            <IoPlayOutline size={24}/> Start
+          </StartButton>
+        }
 
       </form>
     </Container>
