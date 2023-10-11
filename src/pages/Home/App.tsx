@@ -44,11 +44,17 @@ export function Home() {
   const activeCycle = cycle.find((cycle) => cycle.id === active);
 
   useEffect(() => {
+    let interval: number;
     if(activeCycle){
-      setInterval(() => {
+      interval = setInterval(() => {
         setAmountSeconds(differenceInSeconds(new Date(), activeCycle.startTime))
       }, 1000)
+
+      return() => {
+        clearInterval(interval)
+      }
     }
+
   }, [activeCycle])
 
   function handleCreateCicle(data: NewCycleFormData){
@@ -64,6 +70,7 @@ export function Home() {
 
     setCycles((state) => [...state, newCycle])
     setActive(id)
+    setAmountSeconds(0)
     reset()
   }
 
@@ -75,7 +82,11 @@ export function Home() {
   const minutes = String(MinutesAmount).padStart(2, '0');
   const seconds = String(secondsAmount).padStart(2, '0');
 
-
+  useEffect(() =>{
+    if(activeCycle){
+      document.title = `Timer - ${minutes}:${seconds}`
+    }
+  }, [minutes, seconds, activeCycle])
 
   return (
     <Container>
