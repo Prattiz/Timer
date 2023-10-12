@@ -46,10 +46,10 @@ export function Home() {
         
           <FormProvider {...newCycleForm}>
             <NewCycleForm/>
-          </FormProvider>
+            
+            </FormProvider>
           <CountDown/>
 
-        
         {
         activeCycle ? 
           <StopButton type="button" onClick={interruptCycle}>

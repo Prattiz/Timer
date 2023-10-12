@@ -1,9 +1,12 @@
-import { 
-    Container, HistoryList, Status
-} from "./history.styles";
+import { Container, HistoryList, Status} from "./history.styles";
+import { useContext } from "react";
+import { CyclesContext } from "../../context/CycleContext";
+import { formatDistanceToNow } from "date-fns"
 
 
 export function History(){
+
+    const { cycle } = useContext(CyclesContext) 
     return(
         <Container>
             <h1>My Historic</h1>
@@ -20,24 +23,28 @@ export function History(){
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>T1</td>
-                            <td>d1</td>
-                            <td>s1</td>
-                            <td><Status $statusColor="green">Finished</Status></td>
-                        </tr>
-                        <tr>
-                            <td>T2</td>
-                            <td>d2</td>
-                            <td>s2</td>
-                            <td><Status $statusColor="yellow">In Progress</Status></td>
-                        </tr>
-                        <tr>
-                            <td>T3</td>
-                            <td>d3</td>
-                            <td>s3</td>
-                            <td><Status $statusColor="red">Interrupted</Status></td>
-                        </tr>
+                        {
+                        cycle.map(cycle => {
+                            return(
+                                 <tr key={cycle.id}>
+                                     <td>{cycle.task}</td>
+                                     <td>{cycle.minutesAmount}</td>
+                                    <td>{formatDistanceToNow(cycle.startTime, {addSuffix: true})}</td>
+                                    <td>
+                                        {cycle.finishedDate && <Status $statusColor="green">Finished</Status>}
+
+                                        {cycle.interruptedDate && <Status $statusColor="red">Interupted</Status>}
+
+                                        {!cycle.interruptedDate 
+                                        && 
+                                        !cycle.finishedDate
+                                        && 
+                                        <Status $statusColor="yellow">Working...</Status>}
+                                    </td>
+                                </tr>
+                            )
+                        })
+                        }
                     </tbody>
                 </table>
             </HistoryList>
