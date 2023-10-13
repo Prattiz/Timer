@@ -1,5 +1,6 @@
 import { ReactNode, createContext, useState, useReducer } from "react";
-import { Cycle, cyclesReducer, ActionTypes } from "../reducers/reducers"
+import { Cycle, cyclesReducer } from "../reducers/reducers";
+import { addNewCycleAction , cycleFinished, cycleInterrupted} from "../reducers/actions";
 
 
 
@@ -42,12 +43,7 @@ export function CycleContextProvider({children}: ChildrenProps){
 
     function markCycleAsFinished(){
        
-        dispatch({
-          type: ActionTypes.ADD_CYCLE_FINISHED,
-          payload:{
-            data: active
-          }
-        })
+        dispatch(cycleFinished())
       }
     
       function setSecondsPassed(seconds: number){
@@ -65,23 +61,13 @@ export function CycleContextProvider({children}: ChildrenProps){
           startTime: new Date() 
         };
     
-        dispatch({
-          type:ActionTypes.ADD_NEW_CYCLE,
-          payload:{
-            newCycle,
-          }
-        })
+        dispatch(addNewCycleAction(newCycle))
         
         setAmountSeconds(0)
       }
     
       function interruptCycle(){
-        dispatch({
-          type:ActionTypes.INTERRUPT_CURRENT_CYCLE,
-          payload:{
-            activeCycle,
-          }
-        })
+        dispatch(cycleInterrupted())
         
         document.title = "Timer"
       }
