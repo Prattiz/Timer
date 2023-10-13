@@ -21,7 +21,9 @@ export function cyclesReducer(state: CyclesState, action: any){
     switch(action.type){
 
       case ActionTypes.ADD_NEW_CYCLE:
+        
         return {
+          ...state,
           cycle: [...state.cycle, action.payload.newCycle],
           active: action.payload.newCycle.id,
         }

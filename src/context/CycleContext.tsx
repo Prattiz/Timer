@@ -36,6 +36,7 @@ export function CycleContextProvider({children}: ChildrenProps){
       cycle: [],
       active:null
     },
+    
     (initialState) => {
       const storageState = localStorage.getItem("@time:cycles-state1.0.0");
 
@@ -84,7 +85,7 @@ export function CycleContextProvider({children}: ChildrenProps){
           minutesAmount: data.minutesAmount,
           startTime: new Date() 
         };
-        console.log(newCycle)
+       
         dispatch(addNewCycleAction(newCycle))
         
         setAmountSeconds(0)

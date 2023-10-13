@@ -25,26 +25,26 @@ export function History(){
 
                     <tbody>
                         {
-                        cycle.map((cycle) => {
-                            console.log(cycle.startTime)
+                        cycle.map((cycles) => {
+                            console.log(cycles)
                             return(
-                                 <tr key={cycle.id}>
-                                     <td>{cycle.task}</td>
-                                     <td>{cycle.minutesAmount}</td>
+                                 <tr key={cycles.id}>
+                                     <td>{cycles.task}</td>
+                                     <td>{cycles.minutesAmount} Minutes</td>
                                     <td>
                                         {
-                                        formatDistanceToNow(new Date(cycle.startTime), {
+                                        formatDistanceToNow(new Date(cycles.startTime), {
                                             addSuffix: true,
                                         })}
                                     </td>
                                     <td>
-                                        {cycle.finishedDate && <Status $statusColor="green">Finished</Status>}
+                                        {cycles.finishedDate && <Status $statusColor="green">Finished</Status>}
 
-                                        {cycle.interruptedDate && <Status $statusColor="red">Interupted</Status>}
+                                        {cycles.interruptedDate && <Status $statusColor="red">Interupted</Status>}
 
-                                        {!cycle.interruptedDate 
+                                        {!cycles.interruptedDate 
                                         && 
-                                        !cycle.finishedDate
+                                        !cycles.finishedDate
                                         && 
                                         <Status $statusColor="yellow">Working...</Status>}
                                     </td>

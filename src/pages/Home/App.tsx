@@ -35,7 +35,7 @@ export function Home() {
   const submitDisabled = watch('task') && watch('minutesAmount');
 
   function handleCreateNewCycle(data: NewCycleFormData){
-    console.log(data)
+    
     createCycle(data)
     reset()
   }
