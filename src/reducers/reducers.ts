@@ -1,4 +1,4 @@
-import { ActionTypes } from "./actions"
+import { ActionTypes } from "./actions";
 
 export interface Cycle {
 
@@ -22,8 +22,7 @@ export function cyclesReducer(state: CyclesState, action: any){
 
       case ActionTypes.ADD_NEW_CYCLE:
         return {
-          ...state, 
-          cycle: [state.cycle, action.payload.newCycle],
+          cycle: [...state.cycle, action.payload.newCycle],
           active: action.payload.newCycle.id,
         }
       case ActionTypes.INTERRUPT_CURRENT_CYCLE:
@@ -32,7 +31,7 @@ export function cyclesReducer(state: CyclesState, action: any){
 
           cycle: state.cycle.map((cycle) => {
             if(cycle.id === state.active){
-              return{...cycle, finishedDate: new Date() }
+              return{...cycle, interruptedDate: new Date()}
             } else{
               return cycle
             }}
@@ -46,7 +45,7 @@ export function cyclesReducer(state: CyclesState, action: any){
 
           cycle: state.cycle.map((cycle) => {
             if(cycle.id === state.active){
-              return{...cycle, finishedDate: new Date() }
+              return{...cycle, finishedDate: new Date()}
             } else{
               return cycle
             }}

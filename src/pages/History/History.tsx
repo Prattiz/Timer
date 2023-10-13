@@ -4,6 +4,7 @@ import { CyclesContext } from "../../context/CycleContext";
 import { formatDistanceToNow } from "date-fns"
 
 
+
 export function History(){
 
     const { cycle } = useContext(CyclesContext) 
@@ -24,12 +25,18 @@ export function History(){
 
                     <tbody>
                         {
-                        cycle.map(cycle => {
+                        cycle.map((cycle) => {
+                            console.log(cycle.startTime)
                             return(
                                  <tr key={cycle.id}>
                                      <td>{cycle.task}</td>
                                      <td>{cycle.minutesAmount}</td>
-                                    <td>{formatDistanceToNow(cycle.startTime, {addSuffix: true})}</td>
+                                    <td>
+                                        {
+                                        formatDistanceToNow(new Date(cycle.startTime), {
+                                            addSuffix: true,
+                                        })}
+                                    </td>
                                     <td>
                                         {cycle.finishedDate && <Status $statusColor="green">Finished</Status>}
 
@@ -51,3 +58,4 @@ export function History(){
         </Container>
     )
 }
+
