@@ -28,9 +28,7 @@ export function NewCycleForm(){
            />
 
            <datalist id="task-suggestions">
-            <option value="Project 1"/>
-            <option value="Project 2"/>
-            <option value="Project 3"/>
+            
            </datalist>
 
           <label htmlFor="minutesAmount">In</label>
