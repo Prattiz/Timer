@@ -62,7 +62,7 @@ export function Home() {
             <IoPlayOutline size={24}/> Start
           </StartButton>
         }
-
+        
       </form>
     </Container>
 )}

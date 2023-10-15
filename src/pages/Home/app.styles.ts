@@ -4,6 +4,7 @@ export const Container = styled.div`
 
     flex: 1;
     display: flex;
+   
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -30,6 +31,10 @@ const BaseButton = styled.button`
 
     svg{
         margin-bottom: 2px;
+    }
+
+    @media (max-width: 650px) {
+        width: 90%;
     }
 `
 

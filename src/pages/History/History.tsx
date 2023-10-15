@@ -10,7 +10,7 @@ export function History(){
     const { cycle } = useContext(CyclesContext) 
     return(
         <Container>
-            <h1>My Historic</h1>
+            <h1>Historic</h1>
 
             <HistoryList>
                 <table>
@@ -26,7 +26,7 @@ export function History(){
                     <tbody>
                         {
                         cycle.map((cycles) => {
-                            console.log(cycles)
+                            
                             return(
                                  <tr key={cycles.id}>
                                      <td>{cycles.task}</td>
